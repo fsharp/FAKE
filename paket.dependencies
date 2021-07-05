@@ -70,7 +70,7 @@ nuget FluentMigrator.Runner.SqlServer
 nuget FluentMigrator.Runner.SqlServerCe
 nuget HashLib
 nuget FSharp.Compiler.Service < 37 content: none 
-nuget Octokit
+nuget Octokit ~> 0.50
 nuget System.Net.Http
 nuget Microsoft.DotNet.PlatformAbstractions
 nuget FSharp.Control.Reactive
@@ -142,7 +142,7 @@ group NetcoreBuild
     nuget Fake.Windows.Chocolatey prerelease // FAKE_VERSION (don't edit this line)
     nuget Fake.Tools.Git prerelease // FAKE_VERSION (don't edit this line)
     nuget Mono.Cecil prerelease
-    nuget Octokit
+    nuget Octokit ~> 0.50
     nuget Newtonsoft.Json
 
 // New group because of FSharp.Core 4.5 upgrade, see https://github.com/fsharp/FAKE/pull/2011
@@ -182,7 +182,7 @@ group netcore
 
     nuget FSharp.Core ~> 4.0
     nuget FParsec
-    nuget Octokit
+    nuget Octokit ~> 0.50
     nuget Newtonsoft.Json
     nuget Paket.Core // prerelease
     nuget NuGet.Protocol < 5.7

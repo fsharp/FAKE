@@ -212,7 +212,7 @@ module GitHub =
             let archiveContents = File.OpenRead(fi.FullName)
             let assetUpload = ReleaseAssetUpload(fi.Name,"application/octet-stream",archiveContents,Nullable timeout)
             
-            let! asset = Async.AwaitTask <| release'.Client.Repository.Release.UploadAsset(release'.Release, assetUpload)
+            let! asset = Async.AwaitTask <| release'.Client.Repository.Release.UploadAsset(release'.Release, assetUpload, Async.DefaultCancellationToken)
             printfn "Uploaded %s" asset.Name
             return release'
         }
