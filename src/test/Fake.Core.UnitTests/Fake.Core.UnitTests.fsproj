@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\app\Fake.IO.Zip\Fake.IO.Zip.fsproj" />
     <ProjectReference Include="..\..\app\Fake.IO.FileSystem\Fake.IO.FileSystem.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Testing.Fixie\Fake.Testing.Fixie.fsproj" />
+    <ProjectReference Include="..\..\app\Fake.Tools.GitVersion\Fake.Tools.GitVersion.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Tools.Git\Fake.Tools.Git.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Tools.Pickles\Fake.Tools.Pickles.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Core.Context\Fake.Core.Context.fsproj" />
@@ -75,6 +76,7 @@
     <Compile Include="Fake.Core.Context.fs" />
     <Compile Include="Fake.Core.FakeVar.fs" />
     <Compile Include="Fake.Runtime.fs" />
+    <Compile Include="Fake.Tools.GitVersion.fs" />
     <Compile Include="Fake.Tools.Octo.fs" />
     <Compile Include="Fake.Sql.SqlPackage.fs" />
     <Compile Include="Fake.BuildServer.Bitbucket.fs" />

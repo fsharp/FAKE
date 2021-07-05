@@ -6,13 +6,21 @@ open System
 open System.IO
 open Fake.IO.Globbing
 open Fake.Core
+open Fake.DotNet
 
 type GitversionParams = {
+    /// Tool type
+    ToolType : ToolType
+    /// Path to the GitVersion exe file.
     ToolPath : string
+    /// The timeout for the GitVersion process.
+    TimeOut : TimeSpan
 }
 
-let private gitversionDefaults = {
+let private GitVersionDefaults = {
+    ToolType = ToolType.Create()
     ToolPath = Tools.findToolInSubPath "GitVersion.exe" (Environment.environVarOrDefault "ChocolateyInstall" (Directory.GetCurrentDirectory()))
+    TimeOut = TimeSpan.FromMinutes 1.
 }
 
 type GitVersionProperties = {
@@ -42,21 +50,31 @@ type GitVersionProperties = {
     CommitDate : string
 }
 
+let internal createProcess setParams =
+    let parameters = GitVersionDefaults |> setParams
+    
+    CreateProcess.fromCommand (RawCommand(parameters.ToolPath, Arguments.Empty))
+    |> CreateProcess.withToolType (parameters.ToolType.WithDefaultToolCommandName "gitversion")
+    |> CreateProcess.redirectOutput
+    |> CreateProcess.withTimeout parameters.TimeOut
+    |> CreateProcess.ensureExitCode
+    |> fun command ->
+        Trace.trace command.CommandLine
+        command
+
 /// Runs [GitVersion](https://gitversion.readthedocs.io/en/latest/) on a .NET project file.
 /// ## Parameters
 ///
-///  - `setParams` - Function used to manipulate the gitversionDefaults value.
+///  - `setParams` - Function used to manipulate the GitVersionDefaults value.
 ///
 /// ## Sample
 ///
 ///      generateProperties id // Use Defaults
 ///      generateProperties (fun p -> { p with ToolPath = "/path/to/directory" }
-let generateProperties (setParams : GitversionParams -> GitversionParams) =
-    let parameters = gitversionDefaults |> setParams
-    let timespan =  TimeSpan.FromMinutes 1.
+let generateProperties setParams =
+    let result =
+        createProcess setParams
+        |> Proc.run
 
-    let result = Process.execWithResult (fun info ->
-        {info with FileName = parameters.ToolPath}
-        |> Process.withFramework) timespan
-    if result.ExitCode <> 0 then failwithf "GitVersion.exe failed with exit code %i and message %s" result.ExitCode (String.concat "" result.Messages)
-    result.Messages |> String.concat "" |> fun j -> JsonConvert.DeserializeObject<GitVersionProperties>(j)
+    result.Result.Output
+    |> JsonConvert.DeserializeObject<GitVersionProperties>
