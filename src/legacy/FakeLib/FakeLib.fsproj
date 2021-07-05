@@ -314,6 +314,9 @@
     <Compile Include="..\..\app\Fake.JavaScript.Yarn\Yarn.fs">
       <Link>Fake.JavaScript.Yarn/Yarn.fs</Link>
     </Compile>
+    <Compile Include="..\..\app\Fake.JavaScript.TypeScript\TypeScript.fs">
+      <Link>Fake.JavaScript.TypeScript/TypeScript.fs</Link>
+    </Compile>
     <Compile Include="..\..\app\Fake.Tools.Git\CommandHelper.fs">
       <Link>Fake.Tools.Git/CommandHelper.fs</Link>
     </Compile>
@@ -416,6 +419,9 @@
     <Compile Include="..\..\app\Fake.BuildServer.Travis\Travis.fs">
       <Link>Fake.BuildServer.Travis/Travis.fs</Link>
     </Compile>
+    <Compile Include="..\..\app\Fake.BuildServer.Bitbucket\BitbucketPipelines.fs">
+      <Link>Fake.BuildServer.Bitbucket\BitbucketPipelines.fs</Link>
+    </Compile>
     <Compile Include="..\..\app\Fake.Core.Vault\Vault.fs">
       <Link>Fake.Core.Vault/Vault.fs</Link>
     </Compile>
@@ -448,6 +454,9 @@
     </Compile>
     <Compile Include="..\..\app\Fake.Tools.SignTool\SignTool.fs">
       <Link>Fake.Tools.SignTool/SignTool.fs</Link>
+    </Compile>
+    <Compile Include="..\..\app\Fake.Testing.Fixie\Fixie.fs">
+      <Link>Fake.Testing.Fixie/Fixie.fs</Link>
     </Compile>
     <Compile Include="UserInputHelper.fs" />
     <Compile Include="CSharpHelper.fs" />

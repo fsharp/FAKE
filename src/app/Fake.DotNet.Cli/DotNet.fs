@@ -83,6 +83,7 @@ module DotNet =
         yield!
             ProcessUtils.findFilesOnPath "dotnet"
             |> Seq.filter File.Exists
+            |> Seq.filter (fun dotPath -> dotPath.EndsWith fileName)
         let userInstalldir = defaultUserInstallDir </> fileName
         if File.exists userInstalldir then yield userInstalldir
         let systemInstalldir = defaultSystemInstallDir </> fileName

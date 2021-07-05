@@ -1,5 +1,8 @@
 # Release Notes
 
+## 5.20.5-alpha - tbd
+* tbd
+
 ## 5.20.4 - 2021-03-31
 
 * ENHANCEMENT: Allow users of nunit3 set environment variables in the runner, thanks @robertpi - https://github.com/fsharp/FAKE/pull/2543

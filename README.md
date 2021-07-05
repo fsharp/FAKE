@@ -14,6 +14,10 @@ The new DSL was designed to be succinct, typed, declarative, extensible and easy
 
 See the [project home page](https://fake.build/) for tutorials and [API documentation](https://fake.build/apidocs/v5/index.html).
 
+## Install the project
+
+See detailed instructions on [how to install](https://fake.build/fake-gettingstarted.html#Install-FAKE) the project.
+
 ## Build the project
 
 * Either: Download and install the [Dotnet SDK](https://www.microsoft.com/net/learn/get-started) and run `dotnet tool restore` followed by `dotnet fake build`

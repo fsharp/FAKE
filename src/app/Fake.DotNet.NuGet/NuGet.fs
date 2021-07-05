@@ -803,8 +803,14 @@ let extractFeedPackageFromJson (data : JObject) isLatestVersion =
       Title = data.["title"].ToString()
     }
 
+/// Gets a Package information from NuGet feed by package id.
+/// ## Parameters
+///
+///  - `repoUrl` - Query endpoint of NuGet search service
+///  - `packageName` - The package to get
+///  - `version` - The specific version to get
 let getPackage (repoUrl:string) (packageName:string) (version:string) =
-    let url : string = repoUrl.TrimEnd('/') + "?q=title:" + packageName + "&take=1"
+    let url : string = repoUrl.TrimEnd('/') + "?q=packageid:" + packageName + "&take=1"
     let resp = webClient.DownloadString(url)
     let json = JObject.Parse resp
     let data = (json.["data"] :?> JArray).[0] :?> JObject
@@ -821,13 +827,30 @@ let getPackage (repoUrl:string) (packageName:string) (version:string) =
     data.["version"] <- JValue version
     extractFeedPackageFromJson data isLatest
 
-
+/// Gets the latest published package from NuGet feed by package id.
+/// ## Parameters
+///
+///  - `repoUrl` - Query endpoint of NuGet search service
+///  - `packageName` - The package to get
 let getLatestPackage (repoUrl:string) packageName =
-    let url : string = repoUrl.TrimEnd('/') + "?q=title:" + packageName + "&take=1"
+    let url : string = repoUrl.TrimEnd('/') + "?q=packageid:" + packageName + "&take=1"
     let resp = webClient.DownloadString(url)
     let json = JObject.Parse resp
     let data = (json.["data"] :?> JArray).[0] :?> JObject
     extractFeedPackageFromJson data true
+
+/// Search NuGet query endpoint for packages macthing given name by title
+/// ## Parameters
+///
+///  - `repoUrl` - Query endpoint of NuGet search service
+///  - `packageName` - The package to search for
+let searchByTitle (repoUrl:string) (packageName:string) =
+    let url : string = repoUrl.TrimEnd('/') + "?q=title:" + packageName
+    let resp = webClient.DownloadString(url)
+    let json = JObject.Parse resp
+    let data = (json.["data"] :?> JArray).ToObject<List<JObject>>()
+    data
+    |> List.map(fun datum -> extractFeedPackageFromJson datum false)
 
 /// [omit]
 let downloadPackage targetDir (package : NuSpecPackage) =

@@ -25,6 +25,8 @@ module SqlPackage =
         SqlPackageToolPath : string
         /// Type of action to execute. Defaults to Deploy.
         Action : DeployAction
+        /// Azure AccessToken
+        AccessToken: string
         /// Path to source (path to DACPAC or Connection String).
         Source : string
         /// Path to destination (path to DACPAC or Connection String).
@@ -63,6 +65,7 @@ module SqlPackage =
             |> List.tryHead
             |> defaultArg <| ""
           Action = Deploy
+          AccessToken = ""
           Source = ""
           Destination = ""
           Timeout = None
@@ -75,6 +78,9 @@ module SqlPackage =
 
     [<Literal>]
     let internal Action = "Action"
+
+    [<Literal>]
+    let internal AccessToken = "AccessToken"
 
     [<Literal>]
     let internal Source = "Source"
@@ -106,10 +112,12 @@ module SqlPackage =
     [<Literal>]
     let internal Profile = "Profile"
 
-    let private formatArgument (args:DeployDbArgs) action outputPath additionalParameters variables argumentName =
+    /// [omit]
+    let formatArgument (args:DeployDbArgs) action outputPath additionalParameters variables argumentName =
 
         match argumentName with
         | Action -> sprintf "/Action:%s" action
+        | AccessToken when not(String.isNullOrEmpty args.AccessToken) -> sprintf """/AccessToken:"%s" """ args.AccessToken
         | Source -> sprintf """/SourceFile:"%s" """ args.Source
         | Destination when not(String.isNullOrEmpty(args.Destination)) -> sprintf """/TargetConnectionString:"%s" """ args.Destination
         | OutputPath -> sprintf "%s" outputPath
@@ -118,7 +126,7 @@ module SqlPackage =
         | DropObjectsNotInSource when args.DropObjectsNotInSource.IsSome -> sprintf "/p:DropObjectsNotInSource=%b" args.DropObjectsNotInSource.Value
         | DropObjectsNotInSource when String.isNullOrEmpty(args.Profile) && args.DropObjectsNotInSource.IsNone -> sprintf "/p:DropObjectsNotInSource=%b" false
         | Timeout when args.Timeout.IsSome -> sprintf "/p:CommandTimeout=%d" args.Timeout.Value
-        | Timeout when String.isNullOrEmpty(args.Profile) && args.Timeout.IsNone -> sprintf "/p:CommandTimeout=%d" args.Timeout.Value
+        | Timeout when String.isNullOrEmpty(args.Profile) && args.Timeout.IsSome -> sprintf "/p:CommandTimeout=%d" args.Timeout.Value
         | RecreateDb when args.RecreateDb.IsSome -> sprintf "/p:CreateNewDatabase=%b" args.RecreateDb.Value
         | RecreateDb when String.isNullOrEmpty(args.Profile) && args.RecreateDb.IsNone -> sprintf "/p:CreateNewDatabase=%b" false
         | AdditionalSqlPackageProperties when not(String.isNullOrEmpty(additionalParameters)) -> sprintf "%s" additionalParameters
@@ -144,6 +152,7 @@ module SqlPackage =
         let format = formatArgument args action outputPath additionalParameters variables
 
         let actionParameter = format Action
+        let accessTokenParameter = format AccessToken
         let sourceParameter = format Source
         let destinationParameter = format Destination
         let outputPathParameter = format OutputPath
@@ -155,7 +164,7 @@ module SqlPackage =
         let variablesParameter = format Variables
         let profileParameter = format Profile
         
-        [ actionParameter; sourceParameter; destinationParameter; outputPathParameter; blockOnPossibleDataLossParameter; dropObjectsNotInSourceParameter; timeoutParameter; recreateDbParameter; additionalSqlPackagePropertiesParameter; variablesParameter; profileParameter ]
+        [ actionParameter; accessTokenParameter; sourceParameter; destinationParameter; outputPathParameter; blockOnPossibleDataLossParameter; dropObjectsNotInSourceParameter; timeoutParameter; recreateDbParameter; additionalSqlPackagePropertiesParameter; variablesParameter; profileParameter ]
             |> List.filter (fun item -> item <> "")
             |> String.concat " "
 

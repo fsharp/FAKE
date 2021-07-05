@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\app\Fake.DotNet.Testing.VSTest\Fake.DotNet.Testing.VSTest.fsproj" />
     <ProjectReference Include="..\..\app\Fake.IO.Zip\Fake.IO.Zip.fsproj" />
     <ProjectReference Include="..\..\app\Fake.IO.FileSystem\Fake.IO.FileSystem.fsproj" />
+    <ProjectReference Include="..\..\app\Fake.Testing.Fixie\Fake.Testing.Fixie.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Tools.Git\Fake.Tools.Git.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Tools.Pickles\Fake.Tools.Pickles.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Core.Context\Fake.Core.Context.fsproj" />
@@ -36,8 +37,12 @@
     <ProjectReference Include="..\Fake.ExpectoSupport\Fake.ExpectoSupport.fsproj" />
     <ProjectReference Include="..\..\app\Fake.Tools.SignTool\Fake.Tools.SignTool.fsproj" />
     <ProjectReference Include="..\..\app\Fake.BuildServer.GitLab\Fake.BuildServer.GitLab.fsproj" />
+    <ProjectReference Include="..\..\app\Fake.Sql.SqlPackage\Fake.Sql.SqlPackage.fsproj" />
+    <ProjectReference Include="..\..\app\Fake.BuildServer.Bitbucket\Fake.BuildServer.Bitbucket.fsproj" />
+    <ProjectReference Include="..\..\app\Fake.JavaScript.TypeScript\Fake.JavaScript.TypeScript.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fake.JavaScript.TypeScript.fs" />
     <Content Include="runtimeconfig.template.json" />
     <None Include="paket.references" />
     <Compile Include="Fake.ContextHelper.fs" />
@@ -58,6 +63,7 @@
     <Compile Include="Fake.DotNet.Xdt.fs" />
     <Compile Include="Fake.Testing.ReportGenerator.fs" />
     <Compile Include="Fake.Testing.SonarQube.fs" />
+    <Compile Include="Fake.Testing.Fixie.fs" />
     <Compile Include="Fake.Tools.Git.fs" />
     <Compile Include="Fake.Tools.Pickles.fs" />
     <Compile Include="Fake.Tools.SignTool.fs" />
@@ -70,6 +76,8 @@
     <Compile Include="Fake.Core.FakeVar.fs" />
     <Compile Include="Fake.Runtime.fs" />
     <Compile Include="Fake.Tools.Octo.fs" />
+    <Compile Include="Fake.Sql.SqlPackage.fs" />
+    <Compile Include="Fake.BuildServer.Bitbucket.fs" />
     <Compile Include="Main.fs" />
     <None Include="TestFiles/Fake.DotNet.AssemblyInfoFile/AssemblyInfo.cs" CopyToOutputDirectory="PreserveNewest" />
     <None Include="TestFiles/Fake.DotNet.AssemblyInfoFile/AssemblyInfo.fs" CopyToOutputDirectory="PreserveNewest" />

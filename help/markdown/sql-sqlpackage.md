@@ -24,6 +24,24 @@ Ensure that you have already built your database project (you can do this with s
         SqlPackage.deployDb (fun args -> { args with Source = dacPacPath; Destination = connectionString }) |> ignore
     )
 
+The following sample shows how to deploy a database project to Azure using an access token:
+
+    open Fake.Core
+    open Fake.Sql
+
+    /// the database for local development + compile
+    Target.create "DeployLocalDb" (fun _ ->
+        let dacPacPath = "path/to/dbProject.dacpac"
+        let accessToken = "your-access-token"
+        let connectionString = "Data Source=your-server-name.database.windows.net; Initial Catalog=your-database-name;" 
+        SqlPackage.deployDb (fun args -> 
+            { args with 
+                    Destination = connectionString
+                    AccessToken = accessToken
+                    Source = dacPacPath 
+            }) |> ignore
+    )
+
 ## Deployment Options
 
 You can optionally specify the type of command to use (again, refer to the documentation above for more detail): -
@@ -41,6 +59,7 @@ You can provide following arguments (in brackets are given sqlpackage.exe parame
 
 * SqlPackageToolPath - path to sqlpackage.exe
 * Action - deployment option (/a)
+* AccessToken - An Access token to use in authentication instead of username and password
 * Source - specifies a source file to be used as the source of action instead of a database (/SourceFile)
 * Destination - specifies a valid SQL Server/Azure connection string to the target database (/TargetConnectionString)
 * Timeout - specifies the command timeout in seconds when executing queries against SQL Server (/p:CommandTimeout)

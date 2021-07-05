@@ -16,7 +16,7 @@ let tests =
         testCase "Test that full properties are converted" <| fun _ ->
             let props = getProps (fun p ->
                 {
-                    OutputFormat = Coverlet.OutputFormat.Cobertura
+                    OutputFormat = [Coverlet.OutputFormat.Cobertura; Coverlet.OutputFormat.Json]
                     Output = "coverage.json"
                     Include = [
                         "Incl.Asm1", "Incl.Ns1"
@@ -38,7 +38,7 @@ let tests =
             Expect.containsAll props [
                 "CollectCoverage", "true"
                 "CoverletOutput", "coverage.json"
-                "CoverletOutputFormat", "cobertura"
+                "CoverletOutputFormat", "cobertura,json"
                 "Include", "[Incl.Asm1]Incl.Ns1,[Incl.Asm2]Incl.Ns2"
                 "Exclude", "[Excl.Asm1]Excl.Ns1,[Excl.Asm2]Excl.Ns2"
                 "ExcludeByAttribute", "Attr1,Attr2"

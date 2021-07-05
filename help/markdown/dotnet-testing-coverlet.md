@@ -47,7 +47,7 @@ DotNet.test (fun p ->
     }
     |> Coverlet.withDotNetTestOptions (fun p ->
         { p with
-            OutputFormat = Coverlet.OutputFormat.OpenCover
+            OutputFormat = [Coverlet.OutputFormat.OpenCover]
             Output = "coverage.xml"
             Include = [
                 // Include all namespaces from assemblies whose name starts with MyProject

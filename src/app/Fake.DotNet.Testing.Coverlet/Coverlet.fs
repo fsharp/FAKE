@@ -27,7 +27,7 @@ type ThresholdStat =
 /// Coverlet MSBuild parameters. For more details see: https://github.com/tonerdo/coverlet/blob/master/Documentation/MSBuildIntegration.md
 type CoverletParams =
     { /// (Required) Format of the generated output.
-        OutputFormat : OutputFormat
+        OutputFormat : OutputFormat list
         /// (Required) Path to the generated output file, or directory if it ends with a `/`.
         Output : string
         /// Namespaces to include, as (AssemblyName, Namespace) pairs. Supports `*` and `?` globbing.
@@ -51,7 +51,7 @@ type CoverletParams =
 
 /// The default parameters.
 let private defaults =
-    { OutputFormat = OutputFormat.Json
+    { OutputFormat = [OutputFormat.Json]
       Output = "./"
       Include = []
       Exclude = []
@@ -69,6 +69,10 @@ let private outputFormatToString = function
     | OutputFormat.OpenCover -> "opencover"
     | OutputFormat.Cobertura -> "cobertura"
     | OutputFormat.TeamCity -> "teamcity"
+
+let private outputFormatListToString =
+    List.map outputFormatToString
+    >> String.concat ","
 
 let private namespacesToString =
     Seq.map (fun (asm, ns) -> "[" + asm + "]" + ns)
@@ -90,7 +94,7 @@ let withMSBuildArguments (param: CoverletParams -> CoverletParams) (args: MSBuil
     let properties =
         [
             yield "CollectCoverage", "true"
-            yield "CoverletOutputFormat", outputFormatToString param.OutputFormat
+            yield "CoverletOutputFormat", outputFormatListToString param.OutputFormat
             yield "CoverletOutput", param.Output
             if not (List.isEmpty param.Include) then
                 yield "Include", namespacesToString param.Include

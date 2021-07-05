@@ -91,7 +91,7 @@ This section is to clarify when an how the intellisense updates when you add new
 
 <div class="alert alert-info">
     <h5>INFO</h5>
-    <p>We recommend [Visual Studio Code](https://code.visualstudio.com/) with the [Ionide extension](https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp) for best FAKE tooling support, including proper debugging.</p>
+    <p>We recommend <a href="https://code.visualstudio.com/" rel="nofollow">Visual Studio Code</a> with the <a href="https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp" rel="nofollow">Ionide extension</a> for best FAKE tooling support, including proper debugging.</p>
 </div>
 
 * Assume you have a script `myscript.fsx` with the following contents:
