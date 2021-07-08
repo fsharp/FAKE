@@ -73,7 +73,7 @@ nuget FSharp.Compiler.Service < 37 content: none
 nuget Octokit
 nuget System.Net.Http
 nuget Microsoft.DotNet.PlatformAbstractions
-nuget FSharp.Control.Reactive
+nuget FSharp.Control.Reactive 4.4.2
 nuget System.Reactive.Compatibility
 // From FSharp.Compiler.Service, but manually managed because of rename, use 4.4.0 because of some msbuild weirdness in legacy...
 // no matter what we specify here it seems to always copy 4.4.0 into the output directory. Probably some clash with some implicit dependency somewhere
@@ -86,10 +86,6 @@ group DocsLegacyV4
 group DocsLegacyV5
     source https://api.nuget.org/v3/index.json
     nuget FAKE ~> 5.0
-
-group TestAdapter
-    source https://api.nuget.org/v3/index.json
-    nuget Expecto.VisualStudio.TestAdapter version_in_path: true
 
 group Build
     content: none
@@ -116,9 +112,9 @@ group NetcoreBuild
     storage: none
 
     nuget FSharp.Core
-    nuget Suave
+    nuget Suave 2.5.6
     nuget System.AppContext prerelease
-    nuget Paket.Core // prerelease
+    nuget Paket.Core 6.0.0-beta8
     nuget Fake.Api.GitHub prerelease // FAKE_VERSION (don't edit this line)
     nuget Fake.Core.Target prerelease // FAKE_VERSION (don't edit this line)
     nuget Fake.Core.SemVer prerelease // FAKE_VERSION (don't edit this line)
@@ -151,14 +147,14 @@ group netcorerunner
     //source C:\Users\matth\.nuget\localsource
     storage: none
     framework: net472, netstandard2.0, netcoreapp2.1
-    nuget FSharp.Core
+    nuget FSharp.Core = 5.0.0 redirects: force
 
-    nuget Paket.Core // prerelease
+    nuget Paket.Core 6.0.0-beta8
     nuget Mono.Cecil
     nuget Microsoft.NETCore.App framework: netstandard1.6, netstandard2.0, netcoreapp1.1
     nuget NETStandard.Library  ~> 2.0
     nuget Packaging.Targets
-    nuget FSharp.Compiler.Service content: none
+    nuget FSharp.Compiler.Service >= 37.0 content: none
     nuget Microsoft.DotNet.PlatformAbstractions ~> 2.0
 
     // Testing
@@ -178,18 +174,18 @@ group netcore
     framework: net472, netstandard2.0, netcoreapp2.1
 
     nuget DotNet.Xdt
-    nuget FSharp.Compiler.Service content: none
+    nuget FSharp.Compiler.Service >= 37.0 content: none
 
-    nuget FSharp.Core ~> 4.0
+    nuget FSharp.Core = 5.0.0 redirects: force
     nuget FParsec
     nuget Octokit
     nuget Newtonsoft.Json
-    nuget Paket.Core // prerelease
+    nuget Paket.Core 6.0.0-beta8
     nuget NuGet.Protocol < 5.7
     nuget NuGet.Packaging < 5.7
     nuget Mono.Cecil prerelease
     nuget Mono.Posix.NETStandard
-    nuget FSharp.Control.Reactive
+    nuget FSharp.Control.Reactive 4.4.2
     nuget MSBuild.StructuredLogger
         nuget Microsoft.Build
         nuget Microsoft.Build.Framework

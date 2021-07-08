@@ -23,8 +23,7 @@ module private Helpers =
       oldText.Replace(
         sprintf "argv: Ln: %d Col: %d" lnNr colNr,
         sprintf "Argument %d ('%s')" (colNr + 1L) arg)    
-    let unexpectedShort = string
-                          >> ( + ) "short option -"
+    let unexpectedShort = ( + ) "short option -"
                           >> unexpected
     let unexpectedLong = ( + ) "long option --"
                               >> unexpected
