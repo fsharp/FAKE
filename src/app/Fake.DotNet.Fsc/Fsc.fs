@@ -505,10 +505,8 @@ module Fsc =
     ///             ]
     /// </code>
     /// </example>
-    let compileWithResult (fscParams: FscParam list) (inputFiles: string list) : int =
-        match doCompile scsCompile fscParams inputFiles with
-        | Some _ -> 1
-        | None -> 0
+    let compileWithResult (fscParams: FscParam list) (inputFiles: string list) : exn option =
+        doCompile scsCompile fscParams inputFiles
 
     /// <summary>
     /// Compiles one or more F# source files with the specified parameters.
