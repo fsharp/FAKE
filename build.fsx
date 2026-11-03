@@ -8,7 +8,7 @@ source https://api.nuget.org/v3/index.json
 nuget FSharp.Core
 nuget Microsoft.Build 17.11.48
 nuget System.AppContext prerelease
-nuget Paket.Core prerelease
+nuget Paket.Core
 nuget Fake.Api.GitHub prerelease
 nuget Fake.BuildServer.AppVeyor prerelease
 nuget Fake.BuildServer.TeamCity prerelease
