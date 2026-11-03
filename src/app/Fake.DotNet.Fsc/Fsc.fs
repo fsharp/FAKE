@@ -393,7 +393,7 @@ module Fsc =
     /// <summary>
     /// Type signature for a Compiler Function
     /// </summary>
-    type CompilerFunc = string[] -> FscResultMessage[] * int
+    type CompilerFunc<'TReturn> = string[] -> FscResultMessage[] * 'TReturn
 
     /// <summary>
     /// Computes output type and appends source files to argument list
@@ -428,7 +428,7 @@ module Fsc =
     /// given (i.e. the second argument is an empty list), by default tries
     /// to behave the same way as would the command-line <c>fsc.exe</c> tool.
     /// </summary>
-    let private compileFiles (compiler: CompilerFunc) (srcFiles: string list) (opts: string list) : int =
+    let private compileFiles (compiler: CompilerFunc<'TReturn>) (srcFiles: string list) (opts: string list) : 'TReturn =
         let optsArr = makeArgsList opts srcFiles
 
         Trace.trace <| sprintf "FSC with args:%A" optsArr
@@ -440,7 +440,11 @@ module Fsc =
     /// <summary>
     /// Common compiler arg prep code
     /// </summary>
-    let private doCompile (compiler: CompilerFunc) (fscParams: FscParam list) (inputFiles: string list) : int =
+    let private doCompile
+        (compiler: CompilerFunc<'TReturn>)
+        (fscParams: FscParam list)
+        (inputFiles: string list)
+        : 'TReturn =
         let inputFiles = inputFiles |> Seq.toList
         let taskDesc = inputFiles |> String.separated ", "
 
@@ -468,7 +472,7 @@ module Fsc =
         let scs = FSharpChecker.Create()
         // Always prepend "fsc.exe" since fsc compiler skips the first argument
         let optsArr = Array.append [| "fsc.exe" |] optsArr
-        let errors, exitCode = scs.Compile optsArr |> Async.RunSynchronously
+        let errors, exn = scs.Compile optsArr |> Async.RunSynchronously
 
         /// Better compile reporting thanks to:
         /// https://github.com/jbtule/ComposableExtensions/blob/5b961b30668bb7f4d17238770869b5a884bc591f/tools/CompilerHelper.fsx#L233
@@ -481,7 +485,7 @@ module Fsc =
                 | FSharpDiagnosticSeverity.Hidden -> FscResultMessage.Warning e.Message
                 | FSharpDiagnosticSeverity.Info -> FscResultMessage.Warning e.Message)
 
-        errors, exitCode
+        errors, exn
 
     /// <summary>
     /// Compiles the given F# source files with the specified parameters.
@@ -501,7 +505,7 @@ module Fsc =
     ///             ]
     /// </code>
     /// </example>
-    let compileWithResult (fscParams: FscParam list) (inputFiles: string list) : int =
+    let compileWithResult (fscParams: FscParam list) (inputFiles: string list) : exn option =
         doCompile scsCompile fscParams inputFiles
 
     /// <summary>
@@ -523,10 +527,8 @@ module Fsc =
     /// </code>
     /// </example>
     let compile (fscParams: FscParam list) (inputFiles: string list) : unit =
-        let res = compileWithResult fscParams inputFiles
-
-        if res <> 0 then
-            raise <| BuildException("Fsc: compile failed with exit code", [ string res ])
+        doCompile scsCompile fscParams inputFiles
+        |> Option.iter (fun err -> raise <| BuildException("Fsc: compile failed with error", [ err.Message ]))
 
 
     (*

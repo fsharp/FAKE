@@ -3,9 +3,8 @@
         <PackAsTool>true</PackAsTool>
         <OutputType>Exe</OutputType>
         <ToolCommandName>fake</ToolCommandName>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net10.0</TargetFramework>
         <RollForward>Major</RollForward>
-        <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
         <!-- Debian packaging -->
         <Prefix>/opt/fake</Prefix>
         <PostInstallScript>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/debian-postinst.sh'))</PostInstallScript>
@@ -26,7 +25,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Packaging.Targets" Condition="'$(IsDebianPackaging)' == 'true'">
-            <Version>0.1.153-*</Version>
+            <Version>0.1.232-*</Version>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>

@@ -47,13 +47,19 @@ let tests =
               prepare scenario
               let scenarioPath = resolvePath scenario ""
               // dotnet tool install --version 5.19.0-alpha.local.1 fake-cli --add-source /e/Projects/FAKE/release/dotnetcore/
+
+              // Work around https://github.com/dotnet/sdk/issues/40655 by specifying the tool manifest explicitly
+              let manifestPath = Path.Combine(scenarioPath, ".config", "dotnet-tools.json")
+
               [ yield!
                     [ "tool"
                       "install"
                       "--prerelease"
                       "fake-cli"
                       "--add-source"
-                      releaseDotnetCoreDir ] ]
+                      releaseDotnetCoreDir
+                      "--tool-manifest"
+                      manifestPath ] ]
               |> runDotNetRaw
               |> CreateProcess.withWorkingDirectory scenarioPath
               |> CreateProcess.ensureExitCode

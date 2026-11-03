@@ -459,7 +459,7 @@ module Process =
     /// </summary>
     let mutable ProcessEncoding = Encoding.UTF8
 
-    let inline internal recordProcess (proc: Process) =
+    let inline private recordProcess (proc: Process) =
         let startTime =
             try
                 proc.StartTime

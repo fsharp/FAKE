@@ -6,31 +6,36 @@
       "version": "0.1.232",
       "commands": [
         "dotnet-deb"
-      ]
+      ],
+      "rollForward": true
     },
     "paket": {
-      "version": "9.0.2",
+      "version": "11.0.1",
       "commands": [
         "paket"
-      ]
+      ],
+      "rollForward": false
     },
     "fantomas": {
       "version": "5.0.5",
       "commands": [
         "fantomas"
-      ]
+      ],
+      "rollForward": false
     },
     "fsdocs-tool": {
-      "version": "16.0.1",
+      "version": "22.1.0",
       "commands": [
         "fsdocs"
-      ]
+      ],
+      "rollForward": false
     },
     "fake-cli": {
       "version": "6.2.0",
       "commands": [
         "fake"
-      ]
+      ],
+      "rollForward": false
     }
   }
 }

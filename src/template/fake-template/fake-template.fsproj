@@ -6,7 +6,7 @@
         <NoBuild>true</NoBuild>
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-        <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net10.0;netstandard2.0</TargetFrameworks>
     </PropertyGroup>
     <PropertyGroup>
         <ExcludeFromPackage>

@@ -22,10 +22,10 @@ jobs:
                 os: [ubuntu-22.04, windows-latest, macos-15-intel]
         steps:
             - uses: actions/checkout@v6
-            - name: Setup .NET 6
+            - name: Setup .NET 10
               uses: actions/setup-dotnet@v5
               with:
-                  dotnet-version: '6.0.301'
+                  dotnet-version: '10.0.100'
             - name: Restore dotnet tools
               run: dotnet tool restore
             - name: Install mono (Mac)
@@ -39,7 +39,7 @@ jobs:
             - name: Build fake runner
               run: dotnet pack --version-suffix 1 src/app/fake-cli/fake-cli.fsproj
             - name: add fake runner as a tool
-              run: dotnet tool install fake-cli --add-source "./src/app/fake-cli/bin/Debug" --version 1.0.0-1
+              run: dotnet tool install fake-cli --add-source "./src/app/fake-cli/bin/Debug" --add-source "./src/app/fake-cli/bin/Release" --version 1.0.0-1
             - name: Build
               run: dotnet fake -v build --parallel 3 -e FAKE_DETAILED_ERRORS=true
             - name: publish build artifacts

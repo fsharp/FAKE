@@ -2,9 +2,9 @@
 group Build
     storage none
     source https://api.nuget.org/v3/index.json
-    nuget Fake.DotNet.Cli
-    nuget Fake.IO.FileSystem
-    nuget Fake.Core.Target
+    nuget Fake.DotNet.Cli prerelease
+    nuget Fake.IO.FileSystem prerelease
+    nuget Fake.Core.Target prerelease
     //#if (dsl == "buildtask")
-    nuget BlackFox.Fake.BuildTask
+    nuget BlackFox.Fake.BuildTask prerelease
     //#endif

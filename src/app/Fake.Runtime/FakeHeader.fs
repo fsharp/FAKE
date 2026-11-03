@@ -179,7 +179,7 @@ let tryReadPaketDependenciesFromScript
                 if containsFramework || containsRestriction then
                     p
                 else
-                    "framework: netstandard2.0,net6.0" + "\n" + p
+                    "framework: netstandard2.1,netstandard2.0,net6.0,net8.0,net10.0" + "\n" + p
 
         { Header = PaketInline
           Section = fixDefaults paketCode }

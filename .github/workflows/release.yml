@@ -16,10 +16,10 @@ jobs:
         environment: Production
         steps:
             - uses: actions/checkout@v6
-            - name: Setup .NET 6
+            - name: Setup .NET 10
               uses: actions/setup-dotnet@v5
               with:
-                  dotnet-version: '6.0.301'
+                  dotnet-version: '10.0.100'
             - name: Restore dotnet tools
               run: dotnet tool restore
             - name: remove current fake runner tool
@@ -27,7 +27,7 @@ jobs:
             - name: Build fake runner
               run: dotnet pack -p:PackageVersion=${{ github.event.inputs.releaseVersion }} src/app/fake-cli/fake-cli.fsproj
             - name: add fake runner as a tool
-              run: dotnet tool install fake-cli --add-source "./src/app/fake-cli/bin/Debug" --version ${{ github.event.inputs.releaseVersion }}
+              run: dotnet tool install fake-cli --add-source "./src/app/fake-cli/bin/Debug" --add-source "./src/app/fake-cli/bin/Release" --version ${{ github.event.inputs.releaseVersion }}
             - name: Build
               run: dotnet fake build -t Release_BuildAndTest --parallel 3
             - name: publish build artifacts

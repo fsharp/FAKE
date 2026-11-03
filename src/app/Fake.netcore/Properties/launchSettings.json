@@ -3,7 +3,7 @@
     "Fake.netcore": {
       "commandName": "Project",
       "commandLineArgs": "-s run test.fsx",
-      "workingDirectory": "E:\\projects\\FAKE\\temp"
+      "workingDirectory": "./../../../temp"
     }
   }
 }

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <DefineConstants>$(DefineConstants);CORE_CLR;DOTNETCORE;EXPLICIT_DEPENDENCIES;NETSTANDARD;FAKE_RUNTIME</DefineConstants>
     <AssemblyName>Fake.Runtime</AssemblyName>
     <NoWarn>FS3186</NoWarn>

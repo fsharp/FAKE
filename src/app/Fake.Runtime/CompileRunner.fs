@@ -5,6 +5,7 @@ open Fake.Runtime.Trace
 open Fake.Runtime.Runners
 open Fake.Runtime.SdkAssemblyResolver
 open Fake.IO.FileSystemOperators
+
 #if NETSTANDARD1_6
 open System.Runtime.Loader
 #endif
@@ -67,6 +68,7 @@ let tryRunCached (c: CoreCacheInfo) (context: FakeContext) : RunResult =
                     try
                         ass.GetTypes()
                     with :? ReflectionTypeLoadException as ref ->
+                        traceFAKE "Loading from: %s" fullPath
                         traceFAKE "Could not load types of compiled script:"
 
                         for err in ref.LoaderExceptions do
@@ -203,7 +205,7 @@ let compile (context: FakeContext) outDll =
 
     let fsc = FSharpChecker.Create()
 
-    let errors, returnCode =
+    let errors, exn =
         fsc.Compile(("fake.exe" :: args) |> List.toArray) |> Async.RunSynchronously
 
     let errors =
@@ -216,7 +218,7 @@ let compile (context: FakeContext) outDll =
         |> Seq.toList
 
     let compileErrors = CompilationErrors.ofErrors errors
-    compileErrors, returnCode
+    compileErrors, exn
 
 let runUncached (context: FakeContext) : ResultCoreCacheInfo * RunResult =
     // FSharp compiler will try to clean up the script directory after running the script.
@@ -235,19 +237,19 @@ let runUncached (context: FakeContext) : ResultCoreCacheInfo * RunResult =
     let wishPath = context.CachedAssemblyFilePath + ".dll"
     let pdbWishPath = context.CachedAssemblyFilePath + ".pdb"
 
-    let compileErrors, returnCode = compile context compilerAssemblyTempPath
+    let compileErrors, exn = compile context compilerAssemblyTempPath
 
     let cacheInfo = handleCoreCaching context wishPath compileErrors.FormattedErrors
 
-    if returnCode = 0 then
+    if exn.IsNone then
         // here we will move the result of compilation to FAKE script directory instead of temporary directory
         try
-            File.Move(compilerAssemblyTempPath, wishPath)
+            File.Move(compilerAssemblyTempPath, wishPath, true)
         with :? System.IO.IOException ->
             traceError ("Moving to destination " + wishPath)
             reraise ()
 
-        File.Move(compilerPdbTempPath, pdbWishPath)
+        File.Move(compilerPdbTempPath, pdbWishPath, true)
 
         use execContext =
             Fake.Core.Context.FakeExecutionContext.Create false context.Config.ScriptFilePath []

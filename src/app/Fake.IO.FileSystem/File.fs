@@ -223,7 +223,7 @@ module File =
     ///
     /// <param name="file">The file name to use</param>
     /// <param name="bytes">The bytes to write</param>
-    let writeBytes file bytes = File.WriteAllBytes(file, bytes)
+    let writeBytes file (bytes: byte array) = File.WriteAllBytes(file, bytes)
 
     /// <summary>
     /// Writes a string to a file

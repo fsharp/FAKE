@@ -1,8 +1,8 @@
 //#if (dependencies == "inline")
 #r "paket:
-nuget Fake.DotNet.Cli
-nuget Fake.IO.FileSystem
-nuget Fake.Core.Target //"
+nuget Fake.DotNet.Cli prerelease
+nuget Fake.IO.FileSystem prerelease
+nuget Fake.Core.Target prerelease //"
 //#endif
 #load ".fake/(build.fsx)/intellisense.fsx"
 

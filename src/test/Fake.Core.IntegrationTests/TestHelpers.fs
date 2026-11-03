@@ -70,7 +70,22 @@ let releaseDotnetCoreDir = Path.getFullName (releaseDir + "/dotnetcore")
 
 let fakeToolPath =
     let rawWithoutExtension =
-        Path.getFullName (releaseDir + "/dotnetcore/Fake.netcore/current/fake")
+        let releasePath = releaseDir </> "dotnetcore" </> "Fake.netcore" </> "current"
+
+        if System.IO.Directory.Exists releasePath then
+            Path.getFullName (releasePath </> "fake")
+        else // Local debug:
+            Path.getFullName (
+                releaseDir
+                </> ".."
+                </> "src"
+                </> "app"
+                </> "Fake.netcore"
+                </> "bin"
+                </> "Debug"
+                </> "net10.0"
+                </> "fake"
+            )
 
     if Environment.isUnix then
         rawWithoutExtension

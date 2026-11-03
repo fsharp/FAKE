@@ -559,7 +559,7 @@ let prepareContext (config: FakeConfig) (cache: ICachingProvider) =
         let combined = getCombinedString allScriptContents (getOpts config.CompileOptions)
         allScriptContents, combined, getStringHash combined
 
-    let writeToCache ((scripts: Script list), combined, hash) =
+    let writeToCache ((scripts: Script list), (combined: string), (hash: string)) =
         File.WriteAllText(fakeCacheFile, hash)
         let locations = scripts |> List.map (fun s -> s.Location)
         // write fakeCacheContentsFile

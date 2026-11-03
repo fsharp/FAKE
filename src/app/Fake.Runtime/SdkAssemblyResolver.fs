@@ -29,10 +29,10 @@ type SdkAssemblyResolver(logLevel: Trace.VerboseLevel) =
     let RuntimeResolverResolveMethod =
         Environment.environVarOrDefault "FAKE_SDK_RESOLVER_RUNTIME_VERSION_RESOLVE_METHOD" ""
 
-    // Defaults still .NET 6.0 but could be overriden with .NET 8.0 or even comma-separated "6.0,8.0"
+    // Defaults to .NET 10.0 but could be overridden with .NET 11.0 or even comma-separated "11.0,12.0"
     let RuntimeAssemblyVersions =
         let versions =
-            Environment.environVarOrDefault "FAKE_SDK_RESOLVER_CUSTOM_DOTNET_VERSION" "6.0"
+            Environment.environVarOrDefault "FAKE_SDK_RESOLVER_CUSTOM_DOTNET_VERSION" "10.0"
 
         versions.Split([| ','; ';' |]) |> Array.toList
 
@@ -44,7 +44,7 @@ type SdkAssemblyResolver(logLevel: Trace.VerboseLevel) =
         RuntimeAssemblyVersions
         |> List.map (fun v ->
             if String.IsNullOrEmpty v || v = "\"\"" then
-                ReleaseVersion "6.0.0"
+                ReleaseVersion "10.0.0"
             elif v.Contains "." then
                 ReleaseVersion(v + ".0")
             else
@@ -53,7 +53,14 @@ type SdkAssemblyResolver(logLevel: Trace.VerboseLevel) =
     member this.PaketFrameworkIdentifiers =
         this.SdkVersions
         |> List.map (fun thisSdk ->
-            match FrameworkVersion.TryParse(thisSdk.Major.ToString()) with
+            // Note: .NET 10.0 Requires a version of '10.0' to avoid issues with 'net1x' being interpreted as .NET Framework 1.x
+            let version =
+                if thisSdk.Major >= 10 then
+                    $"{thisSdk.Major}.{thisSdk.Minor}"
+                else
+                    thisSdk.Major.ToString()
+
+            match FrameworkVersion.TryParse(version) with
             | Some v -> FrameworkIdentifier.DotNetFramework v
             | None -> failwithf $"Paket: .NET not found: {thisSdk.Major.ToString()}")
 
@@ -276,7 +283,7 @@ type SdkAssemblyResolver(logLevel: Trace.VerboseLevel) =
             None
 
     member this.GetProductReleasesForSdk(version: ReleaseVersion) =
-        let net60releases =
+        let netReleases =
             if RuntimeResolverResolveMethod = "cache" then
                 // for testing only!
                 this.TryResolveSdkRuntimeVersionFromCache()
@@ -288,7 +295,7 @@ type SdkAssemblyResolver(logLevel: Trace.VerboseLevel) =
         let sdkRelease (release: ProductRelease) =
             release.Sdks |> Seq.exists (fun sdk -> sdk.Version.Equals(version))
 
-        match net60releases with
+        match netReleases with
         | None -> []
         | Some versions ->
             match versions |> List.filter sdkRelease with
@@ -343,10 +350,11 @@ type SdkAssemblyResolver(logLevel: Trace.VerboseLevel) =
                 sdkVersions
                 |> Seq.tryHead
                 |> Option.map (fun sdkVersion -> sdkVersion.Major.ToString())
-                |> Option.defaultValue "6"
+                |> Option.defaultValue "10"
 
             failwithf
-                $"Could not find a suitable .NET 6 runtime version matching SDK version: {versions} (You can also try setting environment variable FAKE_SDK_RESOLVER_CUSTOM_DOTNET_VERSION to e.g. {example}.0 )"
+                $"Could not find a suitable .NET runtime version matching SDK version: {versions} (You can also try setting environment variable FAKE_SDK_RESOLVER_CUSTOM_DOTNET_VERSION to e.g. {example}.0 )"
+
         | releases ->
             let versions =
                 releases

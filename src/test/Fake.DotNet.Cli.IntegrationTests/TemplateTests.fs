@@ -69,10 +69,32 @@ let isProcessSucceeded message (r: ProcessResult<ProcessOutput>) =
 
 let timeout = (TimeSpan.FromMinutes 10.)
 
+let writeTestNuGetConfig rootDir =
+
+    let nugetConfigFilePath = System.IO.Path.Combine(rootDir, "NuGet.config")
+
+    let nugetPackageFolder =
+        System.IO.Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "..", "release", "dotnetcore")
+
+    let nugetConfig =
+        $"""<?xml version="1.0" encoding="utf-8"?>
+        <configuration>
+        <packageSources>
+        <clear />
+        <add key="api.nuget.org" value="https://api.nuget.org/v3/index.json" />
+        <add key="localBuild" value="{nugetPackageFolder}" />
+        </packageSources>
+        </configuration>
+        """
+
+    System.IO.File.WriteAllText(nugetConfigFilePath, nugetConfig)
+
 let runTemplate rootDir kind dependencies dsl =
     Directory.ensure rootDir
 
     try
+        writeTestNuGetConfig rootDir
+
         let result =
             DotNet.exec
                 (dotnetWorkingDir rootDir >> redirect ())
@@ -132,16 +154,6 @@ let fileExists dir fileName =
 let setupTemplate () =
     Process.setEnableProcessTracing true
 
-    try
-        DotNet.uninstallTemplate templatePackageName
-    with exn ->
-        $"should clear out preexisting templates\nDebugging Info: {getDebuggingInfo ()}"
-        |> Expect.isTrue false
-
-    printfn $"{Environment.CurrentDirectory}"
-
-    DotNet.setupEnv dotnetSdk.Value
-
     let templateNupkg =
         GlobbingPattern.create "../../../release/dotnetcore/fake-template.*.nupkg"
         |> GlobbingPattern.setBaseDir __SOURCE_DIRECTORY__
@@ -153,6 +165,16 @@ let setupTemplate () =
         match templateNupkg with
         | Some t -> t
         | Option.None -> templatePackageName
+
+    try // Specs have changed: needs full package name: https://github.com/dotnet/docs/pull/3054
+        DotNet.uninstallTemplate templatePackageName
+    with exn ->
+        $"should clear out preexisting templates\nDebugging Info: {getDebuggingInfo ()}"
+        |> Expect.isTrue false
+
+    printfn $"{Environment.CurrentDirectory}"
+
+    DotNet.setupEnv dotnetSdk.Value
 
     try
         DotNet.installTemplate fakeTemplateName id

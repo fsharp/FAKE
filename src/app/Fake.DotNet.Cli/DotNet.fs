@@ -2739,13 +2739,13 @@ module DotNet =
         __.MarkSuccess()
 
     /// <summary>
-    /// Execute dotnet new <c>--uninstall &lt;PATH|NUGET_ID&gt;</c> command to uninstall a new template
+    /// Execute dotnet new <c>uninstall &lt;PATH|NUGET_ID&gt;</c> command to uninstall a new template
     /// </summary>
     ///
     /// <param name="templateName">template short name to uninstall</param>
     /// <param name="setParams">set version command parameters</param>
     let uninstallTemplate templateName =
-        use __ = Trace.traceTask "DotNet:new" "dotnet new --uninstall command"
+        use __ = Trace.traceTask "DotNet:new" "dotnet new uninstall command"
         let param = TemplateUninstallOptions.Create(templateName)
         let args = buildTemplateUninstallArgs param
         let result = execArgsList (fun _ -> param.Common) "new" args
@@ -2762,6 +2762,6 @@ module DotNet =
 
         match success with
         | true -> ()
-        | false -> failwithf $"dotnet new --uninstall failed with code %i{result.ExitCode}"
+        | false -> failwithf $"dotnet new uninstall failed with code %i{result.ExitCode}"
 
         __.MarkSuccess()

@@ -13,7 +13,7 @@ open Fake.Runtime
 let tests =
     testList
         "Fake.DotNet.sdkAssemblyResolverTests"
-        [ testCase "Runner run script with 6.0.300 SDK version assemblies"
+        [ testCase "Runner run script with 10.0.100 SDK version assemblies"
           <| fun _ ->
               try
                   use d = createTestDir ()
@@ -29,8 +29,8 @@ let tests =
                           ForceInstall = true
                           WorkingDirectory = scenarioTempPath "core-reference-assemblies-net60100"
                           CustomInstallDir = Some preparedDir
-                          Channel = DotNet.CliChannel.Version 6 0
-                          Version = DotNet.CliVersion.Version "6.0.300" })
+                          Channel = DotNet.CliChannel.Version 10 0
+                          Version = DotNet.CliVersion.Version "10.0.100" })
                   |> ignore
 
                   Environment.setEnvironVar "FAKE_SDK_RESOLVER_CUSTOM_DOTNET_PATH" preparedDir
@@ -47,7 +47,7 @@ let tests =
                   let stdOut = String.Join("\n", result.Messages).Trim()
 
                   let expectedNet6PathPortion =
-                      "packs" </> "Microsoft.NETCore.App.Ref" </> "6.0.5" </> "ref" </> "net6.0"
+                      "packs" </> "Microsoft.NETCore.App.Ref" </> "10.0.0" </> "ref" </> "net10.0"
 
                   (sprintf "stdout should contain path like '%s', but was: '%s'" expectedNet6PathPortion stdOut)
                   |> Expect.isTrue (stdOut.Contains expectedNet6PathPortion)
@@ -55,7 +55,7 @@ let tests =
                   // clean up after the test run
                   Environment.setEnvironVar "FAKE_SDK_RESOLVER_CUSTOM_DOTNET_PATH" ""
 
-          testCase "Runner run script with 6.0.301 SDK version assemblies"
+          testCase "Runner run script with 10.0.101 SDK version assemblies"
           <| fun _ ->
               try
                   use d = createTestDir ()
@@ -71,8 +71,8 @@ let tests =
                           ForceInstall = true
                           WorkingDirectory = scenarioTempPath "core-reference-assemblies-net60101"
                           CustomInstallDir = Some preparedDir
-                          Channel = DotNet.CliChannel.Version 6 0
-                          Version = DotNet.CliVersion.Version "6.0.301" })
+                          Channel = DotNet.CliChannel.Version 10 0
+                          Version = DotNet.CliVersion.Version "10.0.101" })
                   |> ignore
 
                   Environment.setEnvironVar "FAKE_SDK_RESOLVER_CUSTOM_DOTNET_PATH" preparedDir
@@ -89,7 +89,7 @@ let tests =
                   let stdOut = String.Join("\n", result.Messages).Trim()
 
                   let expectedNet6PathPortion =
-                      "packs" </> "Microsoft.NETCore.App.Ref" </> "6.0.6" </> "ref" </> "net6.0"
+                      "packs" </> "Microsoft.NETCore.App.Ref" </> "10.0.1" </> "ref" </> "net10.0"
 
                   (sprintf "stdout should contain path like '%s', but was: '%s'" expectedNet6PathPortion stdOut)
                   |> Expect.isTrue (stdOut.Contains expectedNet6PathPortion)
@@ -112,8 +112,8 @@ let tests =
                       ForceInstall = true
                       WorkingDirectory = scenarioTempPath "core-reference-assemblies-net60101-rollforward"
                       CustomInstallDir = Some preparedDir
-                      Channel = DotNet.CliChannel.Version 6 0
-                      Version = DotNet.CliVersion.Version "6.0.301" })
+                      Channel = DotNet.CliChannel.Version 10 0
+                      Version = DotNet.CliVersion.Version "10.0.101" })
               |> ignore
 
               let result =
@@ -127,7 +127,7 @@ let tests =
 
               Expect.isTrue result.OK "The build did not succeed"
 
-          testCase "Runner run script with 6.0.300 SDK version assemblies and resolve runtime version from cached file"
+          testCase "Runner run script with 10.0.100 SDK version assemblies and resolve runtime version from cached file"
           <| fun _ ->
               try
                   use d = createTestDir ()
@@ -143,8 +143,8 @@ let tests =
                           ForceInstall = true
                           WorkingDirectory = scenarioTempPath "core-reference-assemblies-net60100"
                           CustomInstallDir = Some preparedDir
-                          Channel = DotNet.CliChannel.Version 6 0
-                          Version = DotNet.CliVersion.Version "6.0.300" })
+                          Channel = DotNet.CliChannel.Version 10 0
+                          Version = DotNet.CliVersion.Version "10.0.100" })
                   |> ignore
 
                   Environment.setEnvironVar "FAKE_SDK_RESOLVER_CUSTOM_DOTNET_PATH" preparedDir
@@ -164,7 +164,7 @@ let tests =
                   printfn "%s" stdOut
 
                   let expectedNet6PathPortion =
-                      "packs" </> "Microsoft.NETCore.App.Ref" </> "6.0.5" </> "ref" </> "net6.0"
+                      "packs" </> "Microsoft.NETCore.App.Ref" </> "10.0.0" </> "ref" </> "net10.0"
 
                   let expectedCacheFileResolutionMessage =
                       "Trying to resolve runtime version from cache.."

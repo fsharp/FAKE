@@ -17,7 +17,7 @@ group Build
 
 group fakerunner
     source https://api.nuget.org/v3/index.json
-    framework: net472, netstandard2.0, netcoreapp2.1, net6.0
+    framework: netstandard2.0, net10.0
     storage: none
 
     nuget FSharp.Core
@@ -40,7 +40,7 @@ group fakerunner
 
 group fakemodule
     source https://api.nuget.org/v3/index.json
-    framework: net472, netstandard2.0, netcoreapp2.1, net6.0
+    framework: netstandard2.0, net10.0
     storage: none
 
     nuget DotNet.Xdt
