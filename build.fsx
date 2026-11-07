@@ -11,7 +11,6 @@ nuget Microsoft.Build.Framework 17.3.2
 nuget Microsoft.Build.Tasks.Core 17.3.2
 nuget Microsoft.Build.Utilities.Core 17.3.2
 nuget System.AppContext prerelease
-nuget Paket.Core prerelease
 nuget Fake.Api.GitHub prerelease
 nuget Fake.BuildServer.AppVeyor prerelease
 nuget Fake.BuildServer.TeamCity prerelease
